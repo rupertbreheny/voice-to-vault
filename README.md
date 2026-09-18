@@ -226,6 +226,8 @@ skills/voice-to-vault/           ← canonical source (edit here)
 .claude/skills/voice-to-vault  → symlink  (Claude Code)
 ```
 
+> **On Windows:** git only creates real symlinks when `core.symlinks` is enabled, so both runtime paths may clone as plain text files containing a path. Run `git config --global core.symlinks true` before cloning, or just point your runtime at `skills/voice-to-vault/` directly. macOS and Linux are unaffected.
+
 **Project scope (recommended).** Open the cloned repo as your working directory. Both runtimes discover the skill automatically — there is nothing to install.
 
 **User scope (available in every project).** Link it into your home directory instead:
