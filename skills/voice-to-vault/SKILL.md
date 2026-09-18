@@ -17,10 +17,10 @@ An orchestrator inspects the intake directory, determines clip durations, and de
 
 # preconditions
 - **Multi-Agent Runtime**: Runs in any agent framework supporting parallel subagent spawning. Verified on:
-  - **Google Antigravity** — spawns workers via `invoke_subagent`. Skill is discovered at `.agents/skills/voice-to-vault/` (project scope) or `~/.agents/skills/voice-to-vault/` (user scope).
-  - **Claude Code** — spawns workers via the Agent tool. Skill is discovered at `.claude/skills/voice-to-vault/` (project scope) or `~/.claude/skills/voice-to-vault/` (user scope).
+  - **Google Antigravity** — the maintained path. Spawns workers via `invoke_subagent`, and its model accepts audio directly, so workers can perform step 4.1 themselves. Skill is discovered at `.agents/skills/voice-to-vault/` (project scope) or `~/.gemini/antigravity/skills/voice-to-vault/` (user scope).
+  - **Claude Code** — spawns workers via the Agent tool and can run every step *except* transcription. Claude models accept text and images, not audio, so step 4.1 must be delegated to an external engine (see "Swapping the transcription engine"). Do not attempt to transcribe audio directly here; stop and tell the user what is missing instead. Skill is discovered at `.claude/skills/voice-to-vault/` (project scope) or `~/.claude/skills/voice-to-vault/` (user scope).
   - Both paths are symlinks to the canonical `skills/voice-to-vault/` in this repo. Falls back to sequential processing wherever subagents are unsupported.
-- **Native Audio Understanding**: Workers must be capable of processing audio directly. This is the off-device (cloud) path, and is the maintained default. Substituting an on-device engine means replacing step 4.1 only — see "Swapping the transcription engine" below.
+- **An audio-capable transcription step**: either a runtime whose model accepts audio directly (the off-device default), or an external engine the workers can shell out to. **Check this before starting a run.** If neither is available, report that and stop — do not guess at, paraphrase, or invent a transcript under any circumstances. A fabricated transcript of someone's own voice is worse than no note at all.
 - **Audio Duration Utility**: Shell access to `afinfo` (macOS) or `ffprobe` to measure clip durations.
 - **Configuration**: `config.env` configured with vault paths, intake folders, and trigger words.
 
@@ -56,7 +56,7 @@ Workers run concurrently.
 
 ## 4. Worker: Transcribe & Format
 Each worker executes the following:
-1. **Listen to Audio**: Transcribe the recording verbatim, preserving substantive thoughts while eliminating filler disfluencies (`um`, `ah`).
+1. **Listen to Audio**: Transcribe the recording verbatim, preserving substantive thoughts while eliminating filler disfluencies (`um`, `ah`). If this runtime cannot accept audio, invoke the configured external engine instead — and if none is configured, fail this file loudly rather than producing a note with no real transcript in it.
 2. **Handle Corrections & Noise**: Gracefully resolve in-sentence corrections (capturing the speaker's true intent) and mark unintelligible noisy passages as `[inaudible]`.
 3. **Route by Keyword**: Read `references/topicRouting.md`. Extract the first spoken word. If it matches a recognized trigger word (e.g. `idea`, `dream`, `todo`), route to `transcription/{keyword}/`. Otherwise route to `transcription/unsorted/`.
 4. **Optional Dream Transfer**: If the keyword is `dream` and `SYNC_DREAM_TO_DAILY=true`, append the transcript into `# dream` of the daily note for the day before the audio date.

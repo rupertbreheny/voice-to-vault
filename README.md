@@ -106,7 +106,11 @@ Spoken keyword routing works identically regardless of source — say *"Idea."*,
 
 ## Where Transcription Happens
 
-This is the cloud version. Transcription is performed off-device by a multimodal agent runtime — Google Antigravity or Claude Code — that listens to the audio natively. There is no separate transcription API key, no Whisper installation, and no multi-gigabyte model download.
+This is the cloud version. Transcription is performed off-device by an agent runtime that understands audio natively, so there is no separate transcription API key, no Whisper installation, and no multi-gigabyte model download.
+
+That requires a runtime whose model accepts audio as input. **Google Antigravity is the maintained path**, and the one the multi-agent orchestration was built and tested against.
+
+**Claude Code cannot do the transcription step.** Claude models accept text and images, not audio, so there is nothing for a worker to listen with. Claude Code can still run everything around that step — the sync script, batching, keyword routing, note formatting, archival, and the run report — but only if you give it a transcription engine to call, exactly as described under a local version below. Installing the skill there is worthwhile for that reason; expecting it to transcribe on its own is not.
 
 Off-device is the default because frontier multimodal models are markedly better at precisely the things that break voice memos in practice: technical jargon, proper nouns, mid-sentence self-correction, wind and café noise, and switching between languages. On-device models tend to fail *silently* — returning a fluent, clean-looking transcript that is quietly wrong, which is worse than one that visibly struggles. This project optimises for transcript fidelity, and off-device is the maintained path.
 
@@ -118,6 +122,8 @@ A local version is entirely possible. Everything here except one step is transcr
 # Example: whisper.cpp — no audio leaves the machine
 whisper-cli -m models/ggml-large-v3.bin -f "$file" -otxt
 ```
+
+This is also the route that makes the pipeline usable from Claude Code, which has no audio input of its own.
 
 Pull requests wiring up whisper.cpp, faster-whisper, MacWhisper, or Parakeet as a drop-in alternative are welcome. Be aware you are trading accuracy for locality.
 
@@ -228,7 +234,7 @@ TRIGGER_WORDS="idea,dream,todo,meeting,journal,note"
 SYNC_DREAM_TO_DAILY=false
 ```
 
-### 2. Install the Skill — Antigravity and Claude Code
+### 2. Install the Skill
 
 The skill lives once, in [`skills/voice-to-vault/`](skills/voice-to-vault/). Both runtime directories are committed as symlinks pointing at it, so a fresh clone is already wired for both and there is no duplicated copy to keep in sync:
 
@@ -292,10 +298,10 @@ Recordings that iCloud has offloaded are not on disk, so they cannot be copied. 
 
 ### 4. Run Ingestion & Transcription
 
-| Runtime | Invocation |
-| --- | --- |
-| Google Antigravity | `/voice-to-vault` |
-| Claude Code | `/voice-to-vault`, or simply ask: *"transcribe my voice memos"* |
+| Runtime | Invocation | Transcription |
+| --- | --- | --- |
+| Google Antigravity | `/voice-to-vault`, or ask: *"transcribe my voice memos"* | Native — nothing else needed |
+| Claude Code | `/voice-to-vault` | Requires a transcription engine wired into step 4.1 |
 
 Or run the intake script manually:
 ```bash
