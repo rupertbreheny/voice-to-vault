@@ -1,0 +1,27 @@
+# Operating System
+.DS_Store
+Thumbs.db
+
+# User Configuration (Keep your personal paths private)
+config.env
+.env
+*.local.env
+
+# Audio binaries (never commit recordings to git)
+*.m4a
+*.mp3
+*.wav
+*.aac
+*.qta
+*.ogg
+*.flac
+
+# Logs
+*.log
+logs/
+
+# Editor & Agent metadata
+.vscode/
+.idea/
+*.swp
+*.swo
