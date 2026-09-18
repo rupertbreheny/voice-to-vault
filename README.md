@@ -240,18 +240,29 @@ skills/voice-to-vault/           ← canonical source (edit here)
 
 > **On Windows:** git only creates real symlinks when `core.symlinks` is enabled, so both runtime paths may clone as plain text files containing a path. Run `git config --global core.symlinks true` before cloning, or just point your runtime at `skills/voice-to-vault/` directly. macOS and Linux are unaffected.
 
-**Project scope (recommended).** Open the cloned repo as your working directory. Both runtimes discover the skill automatically — there is nothing to install.
+There are three ways to install it. Pick one.
 
-**User scope (available in every project).** Link it into your home directory instead:
+**A. One command, no clone needed.** The [`skills`](https://github.com/vercel-labs/skills) CLI reads this repo, finds the skill, and places it wherever your agent expects:
 
 ```bash
-# Google Antigravity
-mkdir -p ~/.agents/skills
-ln -s "$PWD/skills/voice-to-vault" ~/.agents/skills/voice-to-vault
+npx skills add rupertbreheny/voice-to-vault          # this project
+npx skills add rupertbreheny/voice-to-vault -g       # every project
+```
 
+It offers symlink or copy, and handles the per-agent destinations for you — including agents beyond the two named here.
+
+**B. Work inside the cloned repo.** Open it as your working directory and both runtimes discover the skill automatically. Nothing to install; the committed symlinks above are already in place.
+
+**C. Link it by hand into user scope.** Each agent reads its own directory:
+
+```bash
 # Claude Code
 mkdir -p ~/.claude/skills
 ln -s "$PWD/skills/voice-to-vault" ~/.claude/skills/voice-to-vault
+
+# Google Antigravity
+mkdir -p ~/.gemini/antigravity/skills
+ln -s "$PWD/skills/voice-to-vault" ~/.gemini/antigravity/skills/voice-to-vault
 ```
 
 Swap `ln -s` for `cp -R` if you would rather hold a detached copy you can edit without touching the repo. Verify either runtime picked it up by listing your available skills; `voice-to-vault` should appear.
