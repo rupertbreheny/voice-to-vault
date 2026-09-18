@@ -55,30 +55,17 @@ When enabled, recordings prefixed with `"Dream"` automatically append their tran
 
 ### Future-Date Guard
 
-Apple stamps the recording date into the filename, and the pipeline trusts filenames over filesystem timestamps — copying a file rewrites its `mtime`, so `mtime` is worthless here. But a filename can be wrong, and one failure mode is common enough to be worth naming:
+Recording dates are taken from filenames rather than filesystem timestamps, because copying a file rewrites its `mtime`. Filenames can still be wrong: a date formatter using `YYYY` (ISO week-year) instead of `yyyy` (calendar year) stamps recordings from the last days of December with the following year, putting a whole batch a year ahead of when it was recorded.
 
-> A date formatter using `YYYY` (ISO **week**-year) where it meant `yyyy` (calendar year) rolls recordings from the last days of December into the following year. With Sunday-start weeks, 28 December 2025 was the first day of the week containing 1 January 2026 — so recordings from the 28th to the 31st were stamped `2026`, while the 27th was stamped correctly. A batch lands exactly one year in the future, always at the end of December.
-
-This was found in a real archive: eight recordings filed three months ahead, sitting in exactly the gap their correct dates would have filled.
-
-The guard is absolute: a note is never written with a date later than today. When a parsed date is in the future:
+A note is never written with a date later than today. When a parsed date is in the future:
 
 | Situation | Action | Marker |
 | --- | --- | --- |
-| Date is 25–31 December and one year back is valid | Subtract one year | `date_source: corrected-week-year` |
+| 25–31 December and one year back is valid | Subtract one year | `date_source: corrected-week-year` |
 | Any other future date | Use the file creation date | `date_source: file-creation` |
 | No usable date anywhere | Use today | `date_source: run-date` |
 
-Every correction is named in the run report, with the rejected date, the substituted date, and the reason. The `date_source` property is written **only** when a date needed intervention, so filtering on it in Obsidian Bases — or a plain `grep -rl date_source` — returns precisely the notes worth reviewing. Correctly dated notes carry no extra metadata at all.
-
-The sync script flags future-dated filenames at copy time too, so a bad batch is visible before transcription rather than after:
-
-```
-[2026-09-18 23:03:16] Warning: future-dated filename, will be corrected at intake: 20261228 101918-DEEF215B.m4a
-[2026-09-18 23:03:16] Warning: 2 copied recording(s) carry a future date in their filename.
-```
-
-The recording is always transcribed regardless. A bad filename is never a reason to lose what you said.
+Every correction is named in the run report, and `date_source` is written only when a date needed intervention — so filtering on it in Obsidian Bases returns precisely the notes worth reviewing, and correctly dated notes carry no extra metadata. The sync script flags future-dated filenames at copy time too, so a bad batch is visible before transcription. The recording is transcribed either way.
 
 ---
 
