@@ -43,7 +43,7 @@ duration: {mm.ss}
 ## 2. Note Body Layout
 
 ```markdown
-## [[{YYYY-MM-DD}]]
+# [[{YYYY-MM-DD}]]
 <audio controls src="file://{absolute path to processed audio file}"></audio>
 
 # overview
@@ -54,8 +54,8 @@ duration: {mm.ss}
 ```
 
 ### Body Layout Rules:
-1. **Date Heading**: The first line is a link to the daily note `## [[{YYYY-MM-DD}]]`. Use the date after the future-date guard in `references/fileHandling.md` has been applied — never link a daily note that has not happened yet.
-   * **Exception for Dreams**: When the topic keyword is `dream`, the date link points to the **previous day** (`## [[YYYY-MM-DD - 1 day]]`), as dreams are recalled upon waking and reflect the night before.
+1. **Date Heading**: The first line is a link to the daily note `# [[{YYYY-MM-DD}]]`. All body headings are first-level (`#`), including this one — it sits at the same level as `# overview` and `# transcript`, not above them. Use the date after the future-date guard in `references/fileHandling.md` has been applied — never link a daily note that has not happened yet.
+   * **Exception for Dreams**: When the topic keyword is `dream`, the date link points to the **previous day** (`# [[YYYY-MM-DD - 1 day]]`), as dreams are recalled upon waking and reflect the night before.
 2. **Audio Player**: Second line embeds a standard HTML5 audio player pointing to the external file using a `file://` URI. This enables native inline playback within Obsidian and markdown editors without bloating vault storage.
    * **Privacy note**: this URI is an absolute path and therefore contains the user's macOS username (`file:///Users/<username>/...`). It is local-only and harmless inside a private vault, but it travels with the note if that note is ever published, shared, or exported. Flag this to the user rather than silently rewriting the path.
 3. **# overview**: One or two clear sentences describing the core topic.

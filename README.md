@@ -143,7 +143,7 @@ An Obsidian Base is included that filters on this `type` property — see [Brows
 
 ### Note Body Structure
 ```markdown
-## [[2026-09-18]]
+# [[2026-09-18]]
 <audio controls src="file:///Users/username/Documents/Audio/transcription/processed/20260918 113006.m4a"></audio>
 
 # overview

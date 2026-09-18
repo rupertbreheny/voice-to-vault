@@ -36,7 +36,7 @@ For example: `20260918 113006-F8CBAE81.m4a`
 
 ### Future-date guard (mandatory)
 
-**A recording cannot have been made in the future. Never write a note dated later than today.** This rule is absolute and applies to the frontmatter `date:`, the `## [[date]]` heading, and the date prefix in the filename.
+**A recording cannot have been made in the future. Never write a note dated later than today.** This rule is absolute and applies to the frontmatter `date:`, the `# [[date]]` heading, and the date prefix in the filename.
 
 After parsing a candidate date, compare it to today:
 

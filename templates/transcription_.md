@@ -8,7 +8,7 @@ date: {{date}}
 duration: {{duration}}
 ---
 
-## [[{{date}}]]
+# [[{{date}}]]
 <audio controls src="{{audio_uri}}"></audio>
 
 # overview

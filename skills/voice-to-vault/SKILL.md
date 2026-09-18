@@ -62,7 +62,7 @@ Each worker executes the following:
 4. **Optional Dream Transfer**: If the keyword is `dream` and `SYNC_DREAM_TO_DAILY=true`, append the transcript into `# dream` of the daily note for the day before the audio date.
 5. **Write Markdown Note**: Read `references/noteFormat.md`, and use `templates/transcription_.md` in the repo root as the literal skeleton to fill. Produce the streamlined YAML frontmatter and note body containing:
    - Frontmatter (`type`, `title`, `description`, `tags`, `timestamp`, `date`, `duration`)
-   - Date heading `## [[YYYY-MM-DD]]`
+   - Date heading `# [[YYYY-MM-DD]]`
    - Native audio player `<audio controls src="file://{processed_audio_path}"></audio>`
    - `# overview` summary
    - `# transcript` cleaned text
