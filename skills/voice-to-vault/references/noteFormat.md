@@ -2,7 +2,7 @@
 
 Specification for the frontmatter schema and note body layout produced by voice-to-vault.
 
-**Canonical skeleton:** `templates/transcription.md` in the repo root is the authoritative fill-in template — the placeholders (`{{title}}`, `{{description}}`, `{{timestamp}}`, `{{date}}`, `{{duration}}`, `{{audio_uri}}`, `{{transcript}}`) map one-to-one onto the fields specified below. This document explains the fields; the template is what you fill. If the two ever disagree, the template wins.
+**Canonical skeleton:** `templates/transcription_.md` in the repo root is the authoritative fill-in template — the placeholders (`{{title}}`, `{{description}}`, `{{timestamp}}`, `{{date}}`, `{{duration}}`, `{{audio_uri}}`, `{{transcript}}`) map one-to-one onto the fields specified below. This document explains the fields; the template is what you fill. If the two ever disagree, the template wins.
 
 ## 1. Streamlined Frontmatter Schema
 

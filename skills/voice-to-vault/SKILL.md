@@ -60,7 +60,7 @@ Each worker executes the following:
 2. **Handle Corrections & Noise**: Gracefully resolve in-sentence corrections (capturing the speaker's true intent) and mark unintelligible noisy passages as `[inaudible]`.
 3. **Route by Keyword**: Read `references/topicRouting.md`. Extract the first spoken word. If it matches a recognized trigger word (e.g. `idea`, `dream`, `todo`), route to `transcription/{keyword}/`. Otherwise route to `transcription/unsorted/`.
 4. **Optional Dream Transfer**: If the keyword is `dream` and `SYNC_DREAM_TO_DAILY=true`, append the transcript into `# dream` of the daily note for the day before the audio date.
-5. **Write Markdown Note**: Read `references/noteFormat.md`, and use `templates/transcription.md` in the repo root as the literal skeleton to fill. Produce the streamlined YAML frontmatter and note body containing:
+5. **Write Markdown Note**: Read `references/noteFormat.md`, and use `templates/transcription_.md` in the repo root as the literal skeleton to fill. Produce the streamlined YAML frontmatter and note body containing:
    - Frontmatter (`type`, `title`, `description`, `tags`, `timestamp`, `date`, `duration`)
    - Date heading `## [[YYYY-MM-DD]]`
    - Native audio player `<audio controls src="file://{processed_audio_path}"></audio>`

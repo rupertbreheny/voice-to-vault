@@ -176,8 +176,6 @@ It filters on the `type: transcription` property rather than a folder or tag, so
 
 `transcription.md` is a note that embeds the Base, if you would rather open a note than a `.base` file. It is typed `base`, not `transcription`, so it does not list itself.
 
-> Note: the repo contains two files called `transcription.md` — this one and the note template in `templates/`. Only copy the one you want into your vault, or rename it, so wikilinks stay unambiguous.
-
 ---
 
 ## How It Works: Multi-Agent Parallel Orchestration
@@ -298,18 +296,18 @@ Or run the intake script manually:
 ## Repository Layout
 
 ```
-skills/voice-to-vault/         Canonical skill: SKILL.md + references/
-  references/fileHandling.md   Intake, date parsing, batching, safe archival
-  references/topicRouting.md   Spoken keyword registry and destination routing
-  references/noteFormat.md     Frontmatter schema and transcription principles
-.agents/skills/                Symlink into skills/ for Google Antigravity
-.claude/skills/                Symlink into skills/ for Claude Code
-scripts/sync-voice-memos.sh    Copies new recordings out of the Voice Memos container
-scripts/setup-permissions.md   macOS TCC / Automator wrapper guide
-templates/transcription.md     The note skeleton workers fill in
-bases/transcription.base       Obsidian Base filtering on type: transcription
-bases/transcription.md         A note that embeds the Base
-config.example.env             Copy to config.env (gitignored) and edit
+skills/voice-to-vault/        Canonical skill: SKILL.md + references/
+  references/fileHandling.md  Intake, date parsing, batching, safe archival
+  references/topicRouting.md  Spoken keyword registry and destination routing
+  references/noteFormat.md    Frontmatter schema and transcription principles
+.agents/skills/               Symlink into skills/ for Google Antigravity
+.claude/skills/               Symlink into skills/ for Claude Code
+scripts/sync-voice-memos.sh   Copies new recordings out of the Voice Memos container
+scripts/setup-permissions.md  macOS TCC / Automator wrapper guide
+templates/transcription_.md   The note skeleton workers fill in
+bases/transcription.base      Obsidian Base filtering on type: transcription
+bases/transcription.md        A note that embeds the Base
+config.example.env            Copy to config.env (gitignored) and edit
 ```
 
 `config.env`, all audio formats, and logs are gitignored — your paths and recordings never enter version control.
