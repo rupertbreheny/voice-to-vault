@@ -139,6 +139,8 @@ duration: 02.15
 ---
 ```
 
+An Obsidian Base is included that filters on this `type` property — see [Browsing Your Transcriptions](#browsing-your-transcriptions).
+
 ### Note Body Structure
 ```markdown
 ## [[2026-09-18]]
@@ -150,6 +152,31 @@ Architectural outline for streaming audio ingestion into multi-agent subtasks.
 # transcript
 Here is the complete, cleaned transcript of your spoken audio...
 ```
+
+---
+
+## Browsing Your Transcriptions
+
+`bases/` ships an Obsidian Base that indexes everything the pipeline produces. Copy both files into your vault, wherever you keep Bases:
+
+```bash
+cp bases/transcription.base bases/transcription.md ~/Documents/Obsidian/Main/_base/
+```
+
+It filters on the `type: transcription` property rather than a folder or tag, so it finds your notes wherever they live and keeps working if you reorganise. Six views:
+
+| View | Shows |
+| --- | --- |
+| all | Every transcription, newest first |
+| by topic | Grouped by the folder the spoken keyword routed it into |
+| unsorted | Memos where no trigger word was detected — the ones to file by hand |
+| flagged dates | Recordings whose date the future-date guard had to correct |
+| longest | Longest recordings first |
+| link | Compact linked index |
+
+`transcription.md` is a note that embeds the Base, if you would rather open a note than a `.base` file. It is typed `base`, not `transcription`, so it does not list itself.
+
+> Note: the repo contains two files called `transcription.md` — this one and the note template in `templates/`. Only copy the one you want into your vault, or rename it, so wikilinks stay unambiguous.
 
 ---
 
@@ -280,6 +307,8 @@ skills/voice-to-vault/         Canonical skill: SKILL.md + references/
 scripts/sync-voice-memos.sh    Copies new recordings out of the Voice Memos container
 scripts/setup-permissions.md   macOS TCC / Automator wrapper guide
 templates/transcription.md     The note skeleton workers fill in
+bases/transcription.base       Obsidian Base filtering on type: transcription
+bases/transcription.md         A note that embeds the Base
 config.example.env             Copy to config.env (gitignored) and edit
 ```
 

@@ -1,0 +1,123 @@
+# voice-to-vault — index of every transcription note.
+#
+# Filters on the `type: transcription` property that each generated note
+# carries, so it works wherever the notes live and does not depend on a folder
+# layout, a tag, or a template.
+#
+# Uses only properties voice-to-vault actually writes: type, title,
+# description, tags, timestamp, date, duration, and date_source.
+
+filters:
+  and:
+    - type == "transcription"
+
+formulas:
+  link: link(file.name)
+
+views:
+  # Everything, newest first.
+  - type: table
+    name: all
+    order:
+      - file.name
+      - date
+      - duration
+      - description
+      - file.folder
+    sort:
+      - property: date
+        direction: DESC
+      - property: file.name
+        direction: DESC
+    columnSize:
+      file.name: 340
+      note.date: 110
+      note.duration: 80
+      note.description: 420
+
+  # Grouped by the folder the spoken keyword routed each note into.
+  - type: table
+    name: by topic
+    groupBy:
+      property: file.folder
+      direction: ASC
+    order:
+      - file.name
+      - date
+      - duration
+      - description
+    sort:
+      - property: date
+        direction: DESC
+    columnSize:
+      file.name: 340
+      note.date: 110
+      note.duration: 80
+
+  # Memos where no trigger word was detected — these are the ones to file by hand.
+  - type: table
+    name: unsorted
+    filters:
+      and:
+        - file.folder.contains("unsorted")
+    order:
+      - file.name
+      - date
+      - duration
+      - description
+    sort:
+      - property: date
+        direction: DESC
+    columnSize:
+      file.name: 340
+      note.date: 110
+
+  # Recordings whose date needed correcting. `date_source` is written only when
+  # the future-date guard intervened, so anything appearing here is worth a look.
+  - type: table
+    name: flagged dates
+    filters:
+      and:
+        - "!date_source.isEmpty()"
+    order:
+      - file.name
+      - date
+      - date_source
+      - file.folder
+    sort:
+      - property: date
+        direction: ASC
+    columnSize:
+      file.name: 340
+      note.date: 110
+      note.date_source: 180
+
+  # Longest recordings first — usually the ones worth revisiting.
+  - type: table
+    name: longest
+    limit: 30
+    order:
+      - file.name
+      - duration
+      - date
+      - description
+    sort:
+      - property: duration
+        direction: DESC
+    columnSize:
+      file.name: 340
+      note.duration: 80
+
+  # Compact linked index.
+  - type: table
+    name: link
+    order:
+      - formula.link
+      - date
+      - duration
+    sort:
+      - property: date
+        direction: DESC
+    columnSize:
+      formula.link: 440
+      note.date: 110
